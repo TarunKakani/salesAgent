@@ -1,0 +1,28 @@
+def compare_total_sales_q1_q2(product) -> Tuple[float, float]:
+    q1 = current_df[(current_df["Date"].dt.quarter == 1) & (current_df["Product"] == product)]["Total_Sales"].sum()
+    q2 = current_df[(current_df["Date"].dt.quarter == 2) & (current_df["Product"] == product)]["Total_Sales"].sum()
+    return q1,q2
+
+- current_df[...]: This is pandas DataFrame indexing. The expression inside the square brackets [...] defines a condition to filter rows from current_df.
+
+- (current_df["Date"].dt.quarter == 1):
+    - current_df["Date"]: Accesses the "Date" column of the DataFrame, which is a pandas Series of datetime objects.
+    - .dt: A pandas accessor for datetime operations, allowing access to datetime properties like year, month, or quarter.
+    - .quarter: Extracts the quarter of each date (1 for Jan–Mar, 2 for Apr–Jun, etc.).
+    - == 1: Creates a boolean Series (True where the quarter is 1, False otherwise).
+
+- (current_df["Product"] == product):
+    - current_df["Product"]: Accesses the "Product" column, a Series containing product names (likely strings).
+    == product: Compares each value in the "Product" column to the product parameter (a string), producing a boolean Series (True where the product matches, False otherwise).
+
+- &: The bitwise AND operator combines the two boolean Series from steps 2 and 3. 
+    It produces a new boolean Series where True indicates rows where both conditions are met: the date is in Q1 and the product matches product. 
+    Parentheses ensure each condition is evaluated separately before combining. 
+
+- current_df[...]: The combined boolean Series is used to filter current_df, returning a new DataFrame containing only rows where both conditions (quarter == 1 and Product == product) are True.
+
+- ["Total_Sales"]: From the filtered DataFrame, this selects the "Total_Sales" column, resulting in a pandas Series containing the sales values for the filtered rows.
+
+- .sum(): The sum() method computes the sum of all values in the "Total_Sales" Series, returning a single numerical value (a float, as implied by the function’s return type hint Tuple[float, float]).
+
+- q1 =: The result of the sum (total sales for the product in Q1) is assigned to the variable q1.
